@@ -10,7 +10,7 @@ namespace HelloEmpty
     {
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -24,9 +24,13 @@ namespace HelloEmpty
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => {
+                /*endpoints.MapGet("/", async context => {
                     await context.Response.WriteAsync("Hello World!");
-                });
+                });*/
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
