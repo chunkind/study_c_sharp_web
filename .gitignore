@@ -1,0 +1,62 @@
+# Visual Studio 관련 파일
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.ide
+
+# 빌드 결과물
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.nupkg
+*.snupkg
+*.metaproj
+*.csproj.user
+*.cache
+*.log
+*.csproj.FileListAbsolute.txt
+
+# .NET Core 관련
+project.lock.json
+project.assets.json
+project.fragment.lock.json
+project.nuget.cache
+artifacts/
+TestResults/
+
+# 패키지 및 의존성 관련
+packages/
+node_modules/
+bower_components/
+*.nupkg
+*.snupkg
+.nuget/
+
+# Rider & ReSharper 관련
+.idea/
+*.sln.iml
+*.DotSettings.user
+
+# MacOS 관련
+.DS_Store
+
+# 환경 변수 파일 (보안 관련)
+.env
+secrets.json
+
+# 기타
+*.swp
+*.bak
+*.tmp
+
+/.vs/
+*/.vs/*
+**/.vs/**
