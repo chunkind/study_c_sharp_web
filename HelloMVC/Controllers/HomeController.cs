@@ -1,32 +1,28 @@
-﻿using System.Diagnostics;
-using HelloMVC.Models;
+﻿using HelloEmpty.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelloMVC.Controllers
+namespace HelloEmpty.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
-            return View();
+            HelloMessage msg = new HelloMessage()
+            {
+                Message = "Welcome to Asp.Net MVC !"
+            };
+
+            ViewBag.Noti = "Input message and click submit";
+
+            return View(msg);
         }
 
-        public IActionResult Privacy()
+        // POST를 처리하는 Index
+        [HttpPost]
+        public IActionResult Index(HelloMessage obj)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Noti = "Message Changed";
+            return View(obj);
         }
     }
 }
