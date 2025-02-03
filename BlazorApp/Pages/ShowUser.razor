@@ -1,0 +1,46 @@
+﻿@using BlazorApp.Data;
+
+<p>
+    Users: <b>@Users.Count()</b>
+</p>
+
+<br />
+
+<ul class="list-group">
+    @foreach (UserData user in Users)
+    {
+        <li @key="user" class="list-group-item">
+            <button type="button" class="btn btn-link" @onclick="(()=>KickUser(user))">[Kick]</button>
+            <label>@user.Name</label>
+        </li>
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public List<UserData> Users { get; set; }
+
+    [Parameter]
+    //public Action CallbackTest { get; set; } // StateHasChanged(); 이걸 호출해줘야함
+    public EventCallback CallbackTest { get; set; } // StateHasChanged(); 이거 호출안해줘도 됨
+
+    protected override void OnInitialized()
+    {
+        Users.Add(new UserData() { Name = "chunkind" });
+        Users.Add(new UserData() { Name = "momo03" });
+        Users.Add(new UserData() { Name = "sungkind" });
+    }
+
+    public void AddUser(UserData user)
+    {
+        Users.Add(user);
+    }
+
+    public void KickUser(UserData user)
+    {
+        Users.Remove(user);
+
+        //CallbackTest.Invoke(); // Action 사용할때
+        CallbackTest.InvokeAsync(null); // EventCallback 사용할때
+    }
+}
