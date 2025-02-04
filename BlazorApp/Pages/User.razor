@@ -4,6 +4,16 @@
 
 <h3>Online Users</h3>
 
+<label>Theme Color</label>
+<select class="formcontrol" @bind="_selectedColor">
+    @foreach (var option in _options)
+    {
+        <option value="@option">
+            @option
+        </option>
+    }
+</select>
+
 <CascadingValue Name="ThemeColor" Value="_selectedColor">
     <ShowUser Users="_users" CallbackTest="CallbackTestFunc" @ref="_showUser"></ShowUser>
 </CascadingValue>
