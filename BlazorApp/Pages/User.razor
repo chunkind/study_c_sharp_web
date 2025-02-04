@@ -4,7 +4,9 @@
 
 <h3>Online Users</h3>
 
-<ShowUser Users="_users" CallbackTest="CallbackTestFunc" @ref="_showUser"></ShowUser>
+<CascadingValue Name="ThemeColor" Value="_selectedColor">
+    <ShowUser Users="_users" CallbackTest="CallbackTestFunc" @ref="_showUser"></ShowUser>
+</CascadingValue>
 
 <br/>
 
@@ -23,6 +25,9 @@
 </div>
 
 @code {
+    string _selectedColor = "Green";
+    List<string> _options = new List<string>() { "Green", "Red", "Blue" };
+
     List<UserData> _users = new List<UserData>();
     ShowUser _showUser;
 
