@@ -4,6 +4,9 @@ using System;
 
 namespace RankingApp.Data.Migrations
 {
+    // ORM Object Relational Mapping
+    // 1. UserTable
+    // 2. ItemTable
     public partial class CreateIdentitySchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
