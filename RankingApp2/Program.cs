@@ -25,7 +25,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 
 builder.Services.AddHttpClient<RankingApp2.Data.Services.RankingService>(c =>
 {
-    c.BaseAddress = new Uri("https://localhost:44397");
+    c.BaseAddress = new Uri("https://localhost:5074");
 });
 
 var app = builder.Build();
