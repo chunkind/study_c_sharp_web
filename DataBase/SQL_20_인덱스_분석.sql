@@ -4,10 +4,10 @@
 SELECT *
   FROM EMPLOYEES;
 
--- DB Á¤º¸
+-- DB ì •ë³´
 EXEC sp_helpdb 'master';
 
--- ÀÓ½Ã Å×ÀÌºí ¸¸µéÀÚ ( ÀÎµ¦½º Å×½ºÆ®¿ë)
+-- ìž„ì‹œ í…Œì´ë¸” ë§Œë“¤ìž ( ì¸ë±ìŠ¤ í…ŒìŠ¤íŠ¸ìš©)
 CREATE TABLE Test
 (
 	EmployeeID INT NOT NULL,
@@ -24,22 +24,22 @@ from Employees;
 
 select * from Test;
 
--- °ø°£À» ±²ÀåÈ÷ ºñÈ¿À² ÀûÀ¸·Î »ç¿ëÇÏ°Ú´Ù´Â ¼³Á¤
--- FILLFACTOR (¸®ÇÁ ÆäÀÌÁö °ø°£ 1% ¸¸ »ç¿ë)
--- PAD_INDEX (FILLFACTOR Áß°£ ÆäÀÌÁö Àû¿ë)
+-- ê³µê°„ì„ êµ‰ìž¥ížˆ ë¹„íš¨ìœ¨ ì ìœ¼ë¡œ ì‚¬ìš©í•˜ê² ë‹¤ëŠ” ì„¤ì •
+-- FILLFACTOR (ë¦¬í”„ íŽ˜ì´ì§€ ê³µê°„ 1% ë§Œ ì‚¬ìš©)
+-- PAD_INDEX (FILLFACTOR ì¤‘ê°„ íŽ˜ì´ì§€ ì ìš©)
 create index Test_Index ON Test(LastName)
 WITH (FILLFACTOR = 1, PAD_INDEX = ON)
 GO
 
--- ÀÎµ¦½º ¹øÈ£ Ã£±â
+-- ì¸ë±ìŠ¤ ë²ˆí˜¸ ì°¾ê¸°
 SELECT index_id, name
  FROM sys.indexes
 WHERE object_id = object_id('Test');
 
--- 2¹ø ÀÎµ¦½º Á¤º¸ »ìÆìº¸±â
+-- 2ë²ˆ ì¸ë±ìŠ¤ ì •ë³´ ì‚´íŽ´ë³´ê¸°
 DBCC IND('master', 'Test', 2);
 
--- indexLevel À»º¸¸é
+-- indexLevel ì„ë³´ë©´
 -- Root(2) -> Branch(1) -> Leaf(0)
 
 /*
@@ -49,14 +49,14 @@ DBCC IND('master', 'Test', 2);
 Table[ {Page} {Page} {Page} {Page} .... ]
 */
 
--- HEAP RID([ÆäÀÌÁö ÁÖ¼Ò(4)][ÆÄÀÏID(2)][½½·Ô¹øÈ£(2)] Á¶ÇÕÇÑ ROW ½Äº°ÀÚ. Å×ÀÌºí¿¡¼­ Á¤º¸ ÃßÃâ)
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 828/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 830/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 832/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
+-- HEAP RID([íŽ˜ì´ì§€ ì£¼ì†Œ(4)][íŒŒì¼ID(2)][ìŠ¬ë¡¯ë²ˆí˜¸(2)] ì¡°í•©í•œ ROW ì‹ë³„ìž. í…Œì´ë¸”ì—ì„œ ì •ë³´ ì¶”ì¶œ)
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 828/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 830/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 832/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
 
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 831/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 833/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
-DBCC PAGE('master', 1/*ÆÄÀÏ¹øÈ£*/, 834/*ÆäÀÌÁö¹øÈ£*/, 3/*Ãâ·Â¿É¼Ç*/);
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 831/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 833/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
+DBCC PAGE('master', 1/*íŒŒì¼ë²ˆí˜¸*/, 834/*íŽ˜ì´ì§€ë²ˆí˜¸*/, 3/*ì¶œë ¥ì˜µì…˜*/);
 
--- Random Aceccess (ÇÑ °Ç ÀÐ±â À§ÇØ ÇÑ ÆäÀÌÁö¾¿ Á¢±Ù)
--- Bookmark Lookup (RID¸¦ ÅëÇØ ÇàÀ» Ã£´Â´Ù)
+-- Random Aceccess (í•œ ê±´ ì½ê¸° ìœ„í•´ í•œ íŽ˜ì´ì§€ì”© ì ‘ê·¼)
+-- Bookmark Lookup (RIDë¥¼ í†µí•´ í–‰ì„ ì°¾ëŠ”ë‹¤)

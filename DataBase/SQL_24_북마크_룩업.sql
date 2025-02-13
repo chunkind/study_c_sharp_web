@@ -1,11 +1,11 @@
 use master;
 
--- ºÏ¸¶Å© ·è¾÷
+-- ë¶ë§ˆí¬ ë£©ì—…
 
 -- Index Scan vs Index Seek
--- Index ScanÀÌ Ç×»ó ³ª»Û °ÍÀº ¾Æ´Ï°í
--- Index Seek°¡ Ç×»ó ÁÁÀº °ÍÀº ¾Æ´Ï´Ù.
--- ÀÎµ¦½º¸¦ È°¿ëÇÏ´Âµ¥ ¾î¶»°Ô ´À¸± ¼ö°¡ ÀÖÀ»°¡?
+-- Index Scanì´ í•­ìƒ ë‚˜ìœ ê²ƒì€ ì•„ë‹ˆê³ 
+-- Index Seekê°€ í•­ìƒ ì¢‹ì€ ê²ƒì€ ì•„ë‹ˆë‹¤.
+-- ì¸ë±ìŠ¤ë¥¼ í™œìš©í•˜ëŠ”ë° ì–´ë–»ê²Œ ëŠë¦´ ìˆ˜ê°€ ìˆì„ê°€?
 
 -- NonClustered
 --     1
@@ -19,9 +19,9 @@ use master;
 
 
 -- Heap Table [ {Page} {Page} ]
--- ClusteredÀÇ °æ¿ì Index Seek°¡ ´À¸± ¼ö°¡ ¾ø´Ù.
--- NonClusteredÀÇ °æ¿ì, µ¥ÀÌÅÍ°¡ Leaf Page¿¡ ¾ø´Ù.
--- µû¶ó¼­ ÇÑ ¹ø ´õ Å¸°í °¡¾ßÇÔ
+-- Clusteredì˜ ê²½ìš° Index Seekê°€ ëŠë¦´ ìˆ˜ê°€ ì—†ë‹¤.
+-- NonClusteredì˜ ê²½ìš°, ë°ì´í„°ê°€ Leaf Pageì— ì—†ë‹¤.
+-- ë”°ë¼ì„œ í•œ ë²ˆ ë” íƒ€ê³  ê°€ì•¼í•¨
 	-- 1) RID -> Heap Table (Bookmark Lookup)
 	-- 2) Key -> Clustered
 
@@ -31,16 +31,16 @@ SELECT *
 
 SELECT * FROM TestOrders;
 
--- ³íÅ¬·¯½ºÅÍ ÀÎµ¦½º Ãß°¡
+-- ë…¼í´ëŸ¬ìŠ¤í„° ì¸ë±ìŠ¤ ì¶”ê°€
 CREATE NONCLUSTERED INDEX Orders_Index01
 ON TestOrders(CustomerID);
 
--- ÀÎµ¦½º ¹øÈ£
+-- ì¸ë±ìŠ¤ ë²ˆí˜¸
 SELECT index_id, name
 FROM sys.indexes
 where object_id = object_id('TestOrders');
 
--- Á¶È¸
+-- ì¡°íšŒ
 DBCC IND('master', 'TestOrders', 2);
 /*
 	    838
@@ -52,64 +52,64 @@ SET STATISTICS TIME ON;
 SET STATISTICS IO ON;
 SET STATISTICS PROFILE ON;
 
--- ±âº» Å½»öÀ» ÇØº¸ÀÚ
+-- ê¸°ë³¸ íƒìƒ‰ì„ í•´ë³´ì
 SELECT *
   FROM TestOrders
 WHERE CustomerID = 'QUICK';
 
--- °­Á¦·Î ÀÎµ¦½º¸¦ ÀÌ¿ëÇÏ°Ô ÇØº¸ÀÚ.
+-- ê°•ì œë¡œ ì¸ë±ìŠ¤ë¥¼ ì´ìš©í•˜ê²Œ í•´ë³´ì.
 SELECT *
   FROM TestOrders WITH(INDEX(Orders_Index01))
 WHERE CustomerID = 'QUICK';
 
--- ·è¾÷À» ÁÙÀÌ±âÀ§ÇÑ ¸öºÎ¸².. 28¹ø ·è¾÷½ÃµµÇØ¼­ 8¹ø Ã£À½..
+-- ë£©ì—…ì„ ì¤„ì´ê¸°ìœ„í•œ ëª¸ë¶€ë¦¼.. 28ë²ˆ ë£©ì—…ì‹œë„í•´ì„œ 8ë²ˆ ì°¾ìŒ..
 SELECT *
   FROM TestOrders WITH(INDEX(Orders_Index01))
 WHERE CustomerID = 'QUICK' AND ShipVia = 3;
 
--- ³íÅ¬·¯½ºÅÍ ÀÎµ¦½º »èÁ¦
+-- ë…¼í´ëŸ¬ìŠ¤í„° ì¸ë±ìŠ¤ ì‚­ì œ
 DROP INDEX TestOrders.Orders_Index01;
 
--- °³¼±µÈ º¹ÇÕ ³íÅ¬·¯½ºÅÍ ÀÎµ¦½º Ãß°¡
+-- ê°œì„ ëœ ë³µí•© ë…¼í´ëŸ¬ìŠ¤í„° ì¸ë±ìŠ¤ ì¶”ê°€
 -- Covered Index
 CREATE NONCLUSTERED INDEX Orders_Index01
 ON TestOrders(CustomerID, ShipVia);
 
--- ·è¾÷À» ÁÙÀÌ±âÀ§ÇÑ ¸öºÎ¸²..
--- 8¹ø ·è¾÷½ÃµµÇØ¼­ 8¹ø ²Î¾øÀÌ Ã£À½..
+-- ë£©ì—…ì„ ì¤„ì´ê¸°ìœ„í•œ ëª¸ë¶€ë¦¼..
+-- 8ë²ˆ ë£©ì—…ì‹œë„í•´ì„œ 8ë²ˆ ê½ì—†ì´ ì°¾ìŒ..
 SELECT *
   FROM TestOrders WITH(INDEX(Orders_Index01))
 WHERE CustomerID = 'QUICK' AND ShipVia = 3;
 
 
--- Q) ±×·³ Á¶°Ç1 AND Á¶°Ç2 ÇÊ¿äÇÏ¸é, ¹«Á¶°Ç INDEX(Á¶°Ç1, Á¶°Ç2)¸¦ Ãß°¡ÇØÁÖ¸é Àå¶¯?
--- A) NO! ²À ±×·¸Áö´Â ¾Ê´Ù. DML(INSERT, UPDATE, DELETE) ÀÛ¾÷ ºÎÇÏ°¡ Áõ°¡µÈ´Ù.
+-- Q) ê·¸ëŸ¼ ì¡°ê±´1 AND ì¡°ê±´2 í•„ìš”í•˜ë©´, ë¬´ì¡°ê±´ INDEX(ì¡°ê±´1, ì¡°ê±´2)ë¥¼ ì¶”ê°€í•´ì£¼ë©´ ì¥ë•¡?
+-- A) NO! ê¼­ ê·¸ë ‡ì§€ëŠ” ì•Šë‹¤. DML(INSERT, UPDATE, DELETE) ì‘ì—… ë¶€í•˜ê°€ ì¦ê°€ëœë‹¤.
 
 
--- ³íÅ¬·¯½ºÅÍ ÀÎµ¦½º »èÁ¦
+-- ë…¼í´ëŸ¬ìŠ¤í„° ì¸ë±ìŠ¤ ì‚­ì œ
 DROP INDEX TestOrders.Orders_Index01;
 
--- Look UpÀ» ÁÙÀÌ±âÀ§ÇÑ ¸öºÎ¸² 2Åº
+-- Look Upì„ ì¤„ì´ê¸°ìœ„í•œ ëª¸ë¶€ë¦¼ 2íƒ„
 CREATE NONCLUSTERED INDEX Orders_Index01
-ON TestOrders(CustomerID) INCLUDE(ShipVia); --> µ¥ÀÌÅÍ ¼ø¼­´Â ¾È¹Ù²Ù°ÚÁö¸¸ ÈùÆ®¸¦ ÁÖ°Ú´Ù.
+ON TestOrders(CustomerID) INCLUDE(ShipVia); --> ë°ì´í„° ìˆœì„œëŠ” ì•ˆë°”ê¾¸ê² ì§€ë§Œ íŒíŠ¸ë¥¼ ì£¼ê² ë‹¤.
 
 -- NonClustered
 --     1
 -- 2[(data1(shipVia=3), data2(shipVia=2), ... data28)] 3 4 5 6
 
--- 8¹ø ·è¾÷½ÃµµÇØ¼­ 8¹ø ²Î¾øÀÌ Ã£À½..
+-- 8ë²ˆ ë£©ì—…ì‹œë„í•´ì„œ 8ë²ˆ ê½ì—†ì´ ì°¾ìŒ..
 SELECT *
   FROM TestOrders WITH(INDEX(Orders_Index01))
 WHERE CustomerID = 'QUICK' AND ShipVia = 3;
 
--- À§¿Í °°Àº ´«¹°°Ü¿î ³ë·Â¿¡µµ ´äÀÌ ¾ø´Ù¸é..
--- Clustered Index È°¿ëÀ» °í·ÁÇÒ ¼ö ÀÖ´Ù.
--- But! Clustered Index´Â Å×ÀÌºí´ç 1°³¸¸ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.
+-- ìœ„ì™€ ê°™ì€ ëˆˆë¬¼ê²¨ìš´ ë…¸ë ¥ì—ë„ ë‹µì´ ì—†ë‹¤ë©´..
+-- Clustered Index í™œìš©ì„ ê³ ë ¤í•  ìˆ˜ ìˆë‹¤.
+-- But! Clustered IndexëŠ” í…Œì´ë¸”ë‹¹ 1ê°œë§Œ ì‚¬ìš© í•  ìˆ˜ ìˆë‹¤.
 
--- °á·Ğ --
--- NonClustered Index°¡ ¾Ç¿µÇâÀ» ÁÖ´Â°æ¿ì?
-	-- ºÏ¸¶Å© ·è¾÷ÀÌ ½É°¢ÇÑ ºÎÇÏ¸¦ ¾ß±âÇÒ ¶§
--- ´ë¾È?
-	-- ¿É¼Ç 1) Covered Index (°Ë»öÇÒ ¸ğµç ÄÃ·³À» Æ÷ÇÔÇÏ°Ú´Ù)
-	-- ¿É¼Ç 2) Index¿¡´Ù Include·Î ÈùÆ®¸¦ ³²±ä´Ù.
-	-- ¿É¼Ç 3) Clustered °í·Á (´Ü, 1¹ø¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Â ±Ã±Ø±â) -> NonClustered ¾Ç¿µÇâÀ» ÁÙ¼ö ÀÖÀ½
+-- ê²°ë¡  --
+-- NonClustered Indexê°€ ì•…ì˜í–¥ì„ ì£¼ëŠ”ê²½ìš°?
+	-- ë¶ë§ˆí¬ ë£©ì—…ì´ ì‹¬ê°í•œ ë¶€í•˜ë¥¼ ì•¼ê¸°í•  ë•Œ
+-- ëŒ€ì•ˆ?
+	-- ì˜µì…˜ 1) Covered Index (ê²€ìƒ‰í•  ëª¨ë“  ì»¬ëŸ¼ì„ í¬í•¨í•˜ê² ë‹¤)
+	-- ì˜µì…˜ 2) Indexì—ë‹¤ Includeë¡œ íŒíŠ¸ë¥¼ ë‚¨ê¸´ë‹¤.
+	-- ì˜µì…˜ 3) Clustered ê³ ë ¤ (ë‹¨, 1ë²ˆë§Œ ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” ê¶ê·¹ê¸°) -> NonClustered ì•…ì˜í–¥ì„ ì¤„ìˆ˜ ìˆìŒ

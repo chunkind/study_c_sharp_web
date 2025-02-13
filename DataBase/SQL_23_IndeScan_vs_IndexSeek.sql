@@ -1,6 +1,6 @@
 use master;
 
--- ÀÎµ¦½º Á¢±Ù ¹æ½Ä (Access)
+-- ì¸ë±ìŠ¤ ì ‘ê·¼ ë°©ì‹ (Access)
 -- Index Scan vs Index Seek
 
 create table TestAccess
@@ -31,24 +31,24 @@ begin
 	set @i = @i + 1;
 end
 
--- ÀÎµ¦½º Á¤º¸
+-- ì¸ë±ìŠ¤ ì •ë³´
 exec sp_helpindex 'TestAccess';
 
--- ÀÎµ¦½º ¹øÈ£
+-- ì¸ë±ìŠ¤ ë²ˆí˜¸
 select index_id, name
 from sys.indexes
 where object_id = object_id('TestAccess');
 
--- Á¶È¸
+-- ì¡°íšŒ
 dbcc ind('master', 'TestAccess', 1);
 dbcc ind('master', 'TestAccess', 2);
 
 
--- ³í¸®Àû ÀÐ±â -> ½ÇÁ¦ µ¥ÀÌÅÍ¸¦ Ã£±â À§ÇØ ÀÐÀº ÆäÀÌÁö ¼ö
+-- ë…¼ë¦¬ì  ì½ê¸° -> ì‹¤ì œ ë°ì´í„°ë¥¼ ì°¾ê¸° ìœ„í•´ ì½ì€ íŽ˜ì´ì§€ ìˆ˜
 SET STATISTICS TIME ON;
 SET STATISTICS IO ON;
 
--- INDEX SCAN = LEAF PAGE ¼øÂ÷ÀûÀ¸·Î °Ë»ö
+-- INDEX SCAN = LEAF PAGE ìˆœì°¨ì ìœ¼ë¡œ ê²€ìƒ‰
 select *
   from TestAccess;
 

@@ -1,22 +1,22 @@
 use master;
 
--- ÀÎµ¦½º Á¾·ù
--- Clustered(¿µÇÑ »çÀü) vs Non-Clustered(»öÀÎ)
+-- ì¸ë±ìŠ¤ ì¢…ë¥˜
+-- Clustered(ì˜í•œ ì‚¬ì „) vs Non-Clustered(ìƒ‰ì¸)
 
 -- Clustered
 	-- Leaf Page = Data Page
-	-- µ¥ÀÌÅÍ´Â Clustered Index Å° ¼ø¼­·Î Á¤·Ä
+	-- ë°ì´í„°ëŠ” Clustered Index í‚¤ ìˆœì„œë¡œ ì •ë ¬
 
--- Non-Clusteed ? (»ç½Ç Clustered Index À¯¹«¿¡ µû¶ó¼­ ´Ù¸£°Ô µ¿ÀÛ)
--- 1) Clustered Index°¡ ¾ø´Â °æ¿ì
-	-- Clustered Index°¡ ¾øÀ¸¸é µ¥ÀÌÅÍ´Â Heap TableÀÌ¶ó´Â °÷¿¡ ÀúÀå
-	-- Heap RID -> Heap Table¿¡ Á¢±Ù µ¥ÀÌÅÍ ÃßÃâ
+-- Non-Clusteed ? (ì‚¬ì‹¤ Clustered Index ìœ ë¬´ì— ë”°ë¼ì„œ ë‹¤ë¥´ê²Œ ë™ì‘)
+-- 1) Clustered Indexê°€ ì—†ëŠ” ê²½ìš°
+	-- Clustered Indexê°€ ì—†ìœ¼ë©´ ë°ì´í„°ëŠ” Heap Tableì´ë¼ëŠ” ê³³ì— ì €ì¥
+	-- Heap RID -> Heap Tableì— ì ‘ê·¼ ë°ì´í„° ì¶”ì¶œ
 
--- 2) Clustered Index°¡ ÀÖ´Â °æ¿ì
-	-- Heap TableÀÌ ¾øÀ½. Leaf Table¿¡ ½ÇÁ¦ µ¥ÀÌÅÍ°¡ ÀÖ´Ù.
-	-- Clustered IndexÀÇ ½ÇÁ¦ Å° °ªÀ» µé°í ÀÖ´Â´Ù.
+-- 2) Clustered Indexê°€ ìˆëŠ” ê²½ìš°
+	-- Heap Tableì´ ì—†ìŒ. Leaf Tableì— ì‹¤ì œ ë°ì´í„°ê°€ ìˆë‹¤.
+	-- Clustered Indexì˜ ì‹¤ì œ í‚¤ ê°’ì„ ë“¤ê³  ìˆëŠ”ë‹¤.
 
--- ÀÓ½Ã Å×½ºÆ® Å×ÀÌºíÀ» ¸¸µé°í µ¥ÀÌÅÍ º¹»ç
+-- ì„ì‹œ í…ŒìŠ¤íŠ¸ í…Œì´ë¸”ì„ ë§Œë“¤ê³  ë°ì´í„° ë³µì‚¬
 SELECT *
   INTO TestOrderDetails
 FROM [Order Details];
@@ -25,31 +25,31 @@ FROM [Order Details];
 drop table TestOrderDetails;
 
 
--- ÀÎµ¦½º Ãß°¡
+-- ì¸ë±ìŠ¤ ì¶”ê°€
 CREATE INDEX Index_OrderDetails
 ON TestOrderDetails(OrderID, ProductID);
 
--- ÀÎµ¦½º Á¤º¸
+-- ì¸ë±ìŠ¤ ì •ë³´
 EXEC sp_helpindex 'TestOrderDetails';
 
--- ÀÎµ¦½º ¹øÈ£ Ã£±â
+-- ì¸ë±ìŠ¤ ë²ˆí˜¸ ì°¾ê¸°
 select index_id, name
 from sys.indexes
 where object_id = object_id('TestOrderDetails');
 
--- Á¶È¸
+-- ì¡°íšŒ
 -- PageType 1(DATA PAGE) 2(INDEX PAGE)
 DBCC IND('master', 'TestOrderDetails', 2);
 
 /*
           792
 766 784 793 794 795 796 
-Heap RID ([ÆäÀÌÁö ÁÖ¼Ò(4)][ÆÄÀÏID(2)][½½·Ô(2)] ROW)
+Heap RID ([í˜ì´ì§€ ì£¼ì†Œ(4)][íŒŒì¼ID(2)][ìŠ¬ë¡¯(2)] ROW)
 Heap Table[ {Page} {Page} {Page} {Page} ]
 */
 DBCC PAGE('master', 1, 766, 3);
 
--- Clustered ÀÎµ¦½º Ãß°¡
+-- Clustered ì¸ë±ìŠ¤ ì¶”ê°€
 CREATE CLUSTERED INDEX Index_OrderDetails_Clustered
 ON TestOrderDetails(OrderID);
 

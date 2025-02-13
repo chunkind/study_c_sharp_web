@@ -1,10 +1,10 @@
 
--- ÁÖ¹® »ó¼¼ Á¤º¸¸¦ »ìÆìº¸ÀÚ
+-- ì£¼ë¬¸ ìƒì„¸ ì •ë³´ë¥¼ ì‚´íŽ´ë³´ìž
 select *
  from [Order Details]
 ;
 
--- ÀÓ½Ã Å×½ºÆ® Å×ÀÌºíÀ» ¸¸µé°í µ¥ÀÌÅÍ º¹»çÇÑ´Ù.
+-- ìž„ì‹œ í…ŒìŠ¤íŠ¸ í…Œì´ë¸”ì„ ë§Œë“¤ê³  ë°ì´í„° ë³µì‚¬í•œë‹¤.
 select *
   into TestOrderDetails
  from [Order Details];
@@ -12,7 +12,7 @@ select *
 select *
   from TestOrderDetails;
 
--- º¹ÇÕ ÀÎµ¦½º Ãß°¡
+-- ë³µí•© ì¸ë±ìŠ¤ ì¶”ê°€
 create index Index_TestOrderDetails
 on TestOrderDetails(OrderId, ProductId);
 
@@ -37,11 +37,11 @@ DBCC IND('master', 'TestOrderDetails', 2);
 */
 DBCC PAGE('master', 1, 770, 3);
 
--- µû¶ó¼­ ÀÎµ¦½º(A, B) »ç¿ëÁßÀÌ¶ó¸é ÀÎµ¦½º(A) ¾ø¾îµµ ¹«¹æ
--- ÇÏÁö¸¸ B·Îµµ °Ë»öÀÌ ÇÊ¿äÇÏ¸é -> ÀÎµ¦½º(B)´Â º°µµ·Î °É¾îÁà¾ß ÇÔ
+-- ë”°ë¼ì„œ ì¸ë±ìŠ¤(A, B) ì‚¬ìš©ì¤‘ì´ë¼ë©´ ì¸ë±ìŠ¤(A) ì—†ì–´ë„ ë¬´ë°©
+-- í•˜ì§€ë§Œ Bë¡œë„ ê²€ìƒ‰ì´ í•„ìš”í•˜ë©´ -> ì¸ë±ìŠ¤(B)ëŠ” ë³„ë„ë¡œ ê±¸ì–´ì¤˜ì•¼ í•¨
 
--- ÀÎµ¦½º´Â µ¥ÀÌÅÍ°¡ Ãß°¡/°»½Å/»èÁ¦ À¯ÁöµÇ¾î¾ß ÇÔ
--- µ¥ÀÌÅÍ 50°³¸¦ °­Á¦·Î ³Ö¾îº¸ÀÚ.
+-- ì¸ë±ìŠ¤ëŠ” ë°ì´í„°ê°€ ì¶”ê°€/ê°±ì‹ /ì‚­ì œ ìœ ì§€ë˜ì–´ì•¼ í•¨
+-- ë°ì´í„° 50ê°œë¥¼ ê°•ì œë¡œ ë„£ì–´ë³´ìž.
 -- 1) 10248/11 10387/24
 
 DECLARE @i INT = 0;
@@ -52,7 +52,7 @@ BEGIN
 	SET @i = @i + 1;
 END
 
--- INDEX Á¤º¸
+-- INDEX ì •ë³´
 DBCC IND('master', 'TestOrderDetails', 2);
 
 /*
@@ -62,16 +62,16 @@ DBCC IND('master', 'TestOrderDetails', 2);
 
 DBCC PAGE('master', 1, 770, 3);
 DBCC PAGE('master', 1, 785, 3);
--- °á·Ð: ÆäÀÌÁö ¿©À¯ °ø°£ÀÌ ¾ø´Ù¸é -> ÆäÀÌÁö ºÐÇÒ(SPLIT) ¹ß»ý
+-- ê²°ë¡ : íŽ˜ì´ì§€ ì—¬ìœ  ê³µê°„ì´ ì—†ë‹¤ë©´ -> íŽ˜ì´ì§€ ë¶„í• (SPLIT) ë°œìƒ
 
--- °¡°ø Å×½ºÆ®
+-- ê°€ê³µ í…ŒìŠ¤íŠ¸
 select LastName
 into TestEmployees
 from Employees;
 
 select * from TestEmployees;
 
--- ÀÎµ¦½º Ãß°¡
+-- ì¸ë±ìŠ¤ ì¶”ê°€
 create index Index_TestEmployees
 on TestEmployees(LastName);
 
@@ -86,7 +86,7 @@ SELECT *
   FROM TestEmployees
 WHERE LastName LIKE 'Bu%';
 
--- ¿À´ÃÀÇ °á·Ð
--- º¹ÇÕ ÀÎµ¦½º(A, B)¸¦ »ç¿ëÇÒ ¶§ ¼ø¼­ ÁÖÀÇ (A->B ¼ø¼­ °Ë»ö)
--- ÀÎµ¦½º »ç¿ë ½Ã, µ¥ÀÌÅÍ Ãß°¡·Î ÀÎÇØ ÆäÀÌÁö ¿©À¯ °ø°£ÀÌ ¾øÀ¸¸é SPLIT
--- Å° °¡°øÇÒ ¶§ ÁÖÀÇ!
+-- ì˜¤ëŠ˜ì˜ ê²°ë¡ 
+-- ë³µí•© ì¸ë±ìŠ¤(A, B)ë¥¼ ì‚¬ìš©í•  ë•Œ ìˆœì„œ ì£¼ì˜ (A->B ìˆœì„œ ê²€ìƒ‰)
+-- ì¸ë±ìŠ¤ ì‚¬ìš© ì‹œ, ë°ì´í„° ì¶”ê°€ë¡œ ì¸í•´ íŽ˜ì´ì§€ ì—¬ìœ  ê³µê°„ì´ ì—†ìœ¼ë©´ SPLIT
+-- í‚¤ ê°€ê³µí•  ë•Œ ì£¼ì˜!
