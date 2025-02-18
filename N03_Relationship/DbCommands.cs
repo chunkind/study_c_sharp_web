@@ -59,7 +59,7 @@ namespace N02_CRUD
                 }
             };
 
-            db.items.AddRange(items);
+            db.Items.AddRange(items);
             db.SaveChanges();
         }
 
